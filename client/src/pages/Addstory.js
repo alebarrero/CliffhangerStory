@@ -19,6 +19,9 @@ import MenuIcon from '@mui/icons-material/Menu';
 import CardColumn from '../components/CardColumn';
 import { FormControl, InputLabel, Input, FormHelperText, Select, MenuItem } from '@mui/material';
 import { styled } from '@mui/system';
+import { ADD_STORY } from '../utils/mutations';
+import { useMutation } from '@apollo/client';
+
 
 //consolidate imports into destructured import//
 
@@ -80,17 +83,23 @@ const StyledTextarea = styled(TextareaAutosize)(
   );
 
 const Addstory = (props) => {
-
-    const [addStory, setAddStory] = useState({ story: ''});
+const [addstory, {error}] = useMutation(ADD_STORY)
+    const [addStory, setAddStory] = useState({
+    email:'',
+    tile:'',
+    content:'',
+    storytype:''
+    });
     // const [login, { error, data }] = useMutation(LOGIN_USER);
   
     // update state based on form input changes
     const handleChange = (event) => {
-      const { story, value } = event.target;
+      const { name, value } = event.target;
+      console.log(event.target.value)
   
       setAddStory({
         ...addStory,
-        [story]: value,
+        [name]: value,
       });
 
     };
@@ -110,10 +119,10 @@ const Addstory = (props) => {
       // }
   
       // clear form values
-      setAddStory({
-        story: '',
+      // setAddStory({
+        // story: '',
         // password: '',
-      });
+      // });
     };
 
 
@@ -121,24 +130,35 @@ const Addstory = (props) => {
 
   return (
 
-  <FormControl style={{marginTop: "100px"}}>
-  <InputLabel htmlFor="my-input">Title</InputLabel>
-  <Input id="my-input" aria-describedby="my-helper-text" />
-  <FormHelperText id="my-helper-text"> <input
-                  className="form-input"
-                  placeholder="Your email"
-                  name="story"
-                  type="story"
-                  value={addStory.story}
-                  onChange={handleChange}
-                />Add Your Story Title Here</FormHelperText>
+  // <FormControl style={{marginTop: "200px"}}>
+    <form style={{marginTop: "200px"}}onSubmit= {handleFormSubmit}>
+  <InputLabel htmlFor="title">Title</InputLabel>
+  <Input
+  value={addStory.title}
+  onChange={handleChange}
+  name="title"
+    id="title" aria-describedby="my-helper-text" />
+  <FormHelperText id="my-helper-text">
+    Add Your Story Title Here</FormHelperText>
+
+    <InputLabel htmlFor="email">Email</InputLabel>
+  <Input
+  value={addStory.email}
+  onChange={handleChange}
+  name="email"
+    id="email" aria-describedby="my-helper-text" />
+  <FormHelperText id="my-helper-text">
+    Add Your Email Here</FormHelperText>
 
   <StyledTextarea
   maxRows={4}
   aria-label="maximum height"
   placeholder="Maximum 4 rows"
-  defaultValue="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
+  defaultValue="Lorem ipsum dolor sit amet, consectetur
+   adipiscing elit, sed do eiusmod tempor incididunt
     ut labore et dolore magna aliqua."
+    name = "content"
+    value={addStory.content}
    />
 
 <Select
@@ -154,10 +174,10 @@ const Addstory = (props) => {
   </Select>
 
 
-   <Button variant="contained">Save</Button>
+   <Button type ="submit" variant="contained">Save</Button>
+   </form>
 
-
-  </FormControl>
+  // </FormControl>
 
     
   );

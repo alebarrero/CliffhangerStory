@@ -43,11 +43,9 @@ Hi gang! mila and i created another page called new story. this will be the page
 
 
 
-<!----To work with Mila
--type in the story and save it into profile(implement the fetch), to array of user & needs to render on the homepage
--We need to create story seeds
--current stuff we have is hardcoded as placeholders, we have framework but its not styled to be horizontal
--we need to pass in Author, story, title, story type,
--implement the carousel?
+<!---- 5/19/2023 Ale (Mila session)
+We added an HTML <form> in the addstory page in order to try to add title, email, and an actual story to see if the save would button would work and to connect it to database. 
+We can add a Title, and Email but now we have to debug on the content because the content is not able to get a value. In the console log we can see it picks up the title, and email, but we cant type in the story. 
+Once we have this debugged we will be able to move forward and put into mutations in order to connect to database.
 ---->
 
