@@ -1,6 +1,8 @@
-import { useQuery, use_Mutations} from '@apollo/client';
+import { useQuery, use_Mutations } from '@apollo/client';
+
+// css framework for mui css underneath//
 import * as React from 'react';
-import{useState} from "react";
+import { useState } from "react";
 import TextareaAutosize from '@mui/base/TextareaAutosize';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -61,27 +63,46 @@ const StyledTextarea = styled(TextareaAutosize)(
 );
 
 const Addstory = (props) => {
-    const [addStory, setAddStory] = useState({ 
-      content: '', 
-      title: '', 
-      story_type:'Read Only',
+
+  const [addStory, setAddStory] = useState({
+    content: '',
+    title: '',
+    story_type: 'Read Only',
+  });
+  // const [login, { error, data }] = useMutation(LOGIN_USER);
+  const [createStoryconnection, { error }] = useMutation(ADD_STORY);
+
+  // update state based on form input changes
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+
+    setAddStory({
+      ...addStory,
+      [name]: value,
     });
 
-    const handleChange = (event) => {
-      const { name, value } = event.target;
-      setAddStory({
-        ...addStory,
-        [name]: value,
-      });
-    };
+  };
 
-    const handleFormSubmit = async (event) => {
-      event.preventDefault();
-      console.log(addStory);
-      setAddStory({
-        story: '',
+  // submit form
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+    console.log(addStory);
+    try {
+      const { data } = await createStoryconnection({
+        variables: { ...addStory },
       });
-    };
+
+    //   Auth.login(data.login.token);
+    } catch (e) {
+      console.error(e);
+    }
+
+    // clear form values
+    setAddStory({
+      story: '',
+      // password: '',
+    });
+  };
 
     return (
         <Box maxWidth={650} mx="auto">
@@ -94,33 +115,67 @@ const Addstory = (props) => {
                     onChange={handleChange}
                     aria-describedby="my-helper-text" />
 
-                <StyledTextarea
-                    maxRows={4}
-                    name="content"
-                    value={addStory.content}
-                    onChange={handleChange}
-                    aria-label="maximum height"
-                    placeholder="Maximum 4 rows" />
+   
+    <FormControl style={{ marginTop: "250px", width: "800px" }}>
+  <Input
+    id="my-input"
+    className="form-input"
+    placeholder="Your Story Title"
+    name="title"
+    type="text"
+    value={addStory.title}
+    onChange={handleChange}
+    aria-describedby="my-helper-text"
+    style={{ width: "100%" }} // Set the width to 100% to occupy the full width of the form
+  />
 
-                <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={"Read Only"}
-                    name="story_type"
-                    label="Age"
-                    onChange={handleChange}
-                >
-                    <MenuItem value={"Open"}>Open</MenuItem>
-                    <MenuItem value={"Read Only"}>Read Only</MenuItem>
-                </Select>
+<StyledTextarea
+    maxRows={4}
+    name="content"
+    value={addStory.content}
+    onChange={handleChange}
 
-                <Button variant="contained" 
-                    sx={{backgroundColor: "#ff4d00"}}
-                    onClick={handleFormSubmit}
-                >Save</Button>
-            </FormControl> 
-        </Box>
-    );
+        // ------  FRONT END MAP FOR STORIES ----//
+
+  //       {addStory.map((content)) => {
+  //   return (
+  //     <option key={tech._id} value={tech.name}>
+  //       {tech.name}
+  //     </option>
+  //     )
+  // }
+  // }
+  
+  style={{ height: "600px", width: "800px" }} // Adjust the height value to your desired size
+  aria-label="maximum height"
+  placeholder="Maximum 4 rows"
+/>
+
+      <Select
+        labelId="demo-simple-select-label"
+        id="demo-simple-select"
+        value={"Read Only"}
+        name="story_type"
+        label="Age"
+        onChange={handleChange}
+      >
+        <MenuItem value={"Open"}>Open</MenuItem>
+        <MenuItem value={"Read Only"}>Read Only</MenuItem>
+      </Select>
+
+
+      <Button variant="contained"
+        sx={{
+          backgroundColor: "#ff4d00"
+        }}
+        onClick={handleFormSubmit}
+      >Save</Button>
+
+
+    </FormControl>
+
+
+  );
 };
 
 export default Addstory;
